@@ -4,6 +4,7 @@ const vehicleSchema = mongoose.Schema({
   numberPlate: {
     type: String,
     requred: [true, "Please enter the number plate"],
+    unique: false,
   },
   ownedBy: {
     type: mongoose.Types.ObjectId,

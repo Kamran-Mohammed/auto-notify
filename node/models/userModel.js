@@ -32,6 +32,12 @@ const userSchema = mongoose.Schema({
       message: "Passwords are not the same",
     },
   },
+  vehicles: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Vehicle",
+    },
+  ],
   //   passwordChangedAt: {
   //     type: Date,
   //   },

@@ -1,4 +1,5 @@
 const Vehicle = require("../models/vehicleModel");
+const User = require("../models/userModel");
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/appError");
 
@@ -20,6 +21,12 @@ exports.registerVehicle = catchAsyncError(async (req, res, next) => {
     numberPlate: req.body.numberPlate,
     ownedBy: req.user._id,
   });
+
+  //add vehicle to Owner's User document
+  await User.findByIdAndUpdate(req.user._id, {
+    $push: { vehicles: newVehicle._id },
+  });
+
   res.status(201).json({
     status: "success",
     data: {
