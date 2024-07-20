@@ -4,7 +4,7 @@ const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/appError");
 
 function validateNumberPlate(plate) {
-  const pattern = /^[A-Z]{2}\d{2}[A-Z]{1,3}\d{4}$/;
+  const pattern = /^[A-Z]{2}\d{2}(?:[A-Z]{1,3})?\d{4}$/;
   return pattern.test(plate);
 }
 
