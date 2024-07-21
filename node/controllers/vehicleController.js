@@ -8,7 +8,7 @@ function validateNumberPlate(plate) {
   return pattern.test(plate);
 }
 
-exports.registerVehicle = catchAsyncError(async (req, res, next) => {
+exports.addVehicle = catchAsyncError(async (req, res, next) => {
   const numberPlate = req.body.numberPlate;
 
   if (!validateNumberPlate(numberPlate)) {
@@ -18,6 +18,7 @@ exports.registerVehicle = catchAsyncError(async (req, res, next) => {
 
   // req.body.createdBy = req.user.userId; alternative method
   const newVehicle = await Vehicle.create({
+    name: req.body.name,
     numberPlate: req.body.numberPlate,
     ownedBy: req.user._id,
   });
@@ -31,6 +32,19 @@ exports.registerVehicle = catchAsyncError(async (req, res, next) => {
     status: "success",
     data: {
       newVehicle,
+    },
+  });
+});
+
+exports.getMyVehicles = catchAsyncError(async (req, res, next) => {
+  const id = req.user._id;
+
+  const myVehicles = await Vehicle.find({ ownedBy: id });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      myVehicles,
     },
   });
 });
