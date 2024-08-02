@@ -70,7 +70,7 @@ class _NewVehicle extends State<NewVehicle> {
 
     try {
       var response = await http.post(
-          Uri.parse("http://192.168.0.188:3000/api/v1/vehicles/add"),
+          Uri.parse("http://192.168.0.104:3000/api/v1/vehicles/add"),
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer ${token}"
