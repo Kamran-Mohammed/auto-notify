@@ -4,10 +4,12 @@ const authController = require("../controllers/authController");
 
 const router = express.Router();
 
-router.post(
-  "/register",
+router.post("/add", authController.protect, vehicleController.addVehicle);
+
+router.get(
+  "/myVehicles",
   authController.protect,
-  vehicleController.registerVehicle
+  vehicleController.getMyVehicles
 );
 
 // router.patch(

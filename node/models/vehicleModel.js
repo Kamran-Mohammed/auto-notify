@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const vehicleSchema = mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "Please enter a name for your vehicle"],
+  },
   numberPlate: {
     type: String,
     requred: [true, "Please enter the number plate"],
