@@ -37,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
         var jsonResponse = jsonDecode(response.body);
         if (jsonResponse['status'] == "success") {
           var myToken = jsonResponse['token'];
-          // print(myToken);
           await storage.write(key: 'jwt_token', value: myToken);
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => TabsScreen()));

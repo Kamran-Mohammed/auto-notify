@@ -1,6 +1,8 @@
 import 'package:auto_notify/alerts.dart';
 import 'package:auto_notify/home_page.dart';
 import 'package:auto_notify/login_page.dart';
+import 'package:auto_notify/new_vehicle.dart';
+import 'package:auto_notify/vehicle_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -13,6 +15,7 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreen extends State<TabsScreen> {
+  int _selectedPageIndex = 0;
   String? token;
   var storage;
 
@@ -23,7 +26,6 @@ class _TabsScreen extends State<TabsScreen> {
     _checkUser();
   }
 
-  int _selectedPageIndex = 0;
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
@@ -39,20 +41,30 @@ class _TabsScreen extends State<TabsScreen> {
     // setState(() {});
   }
 
+  void _openModalBottomSheet() {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => NewVehicle(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(token);
     Widget activePage = HomePage();
     var activePageTitle = 'Auto Notify Home';
     if (_selectedPageIndex == 1) {
       activePage = Alerts();
       activePageTitle = "Alerts";
+    } else if (_selectedPageIndex == 2) {
+      activePage = VehicleScreen();
+      activePageTitle = "Vehicles";
     }
     return Scaffold(
       appBar: AppBar(
         title: Text(activePageTitle),
       ),
-      // drawer: MainDrawer(onSelectScreen: _selectScreen),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedPageIndex,
@@ -61,8 +73,18 @@ class _TabsScreen extends State<TabsScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.add_alert_sharp), label: ''),
           BottomNavigationBarItem(
               icon: Icon(Icons.notifications_on_rounded), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.garage), label: ''),
         ],
       ),
+      floatingActionButton: _selectedPageIndex == 2
+          ? FloatingActionButton.small(
+              foregroundColor: Colors.white,
+              backgroundColor: (Colors.black),
+              onPressed: _openModalBottomSheet,
+              child: const Icon(Icons.add),
+            )
+          : Text(""),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 }
