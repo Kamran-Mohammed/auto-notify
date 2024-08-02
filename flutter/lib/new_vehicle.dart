@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class NewVehicle extends StatefulWidget {
   const NewVehicle({super.key});
@@ -15,6 +16,14 @@ class NewVehicle extends StatefulWidget {
 }
 
 class _NewVehicle extends State<NewVehicle> {
+  var storage;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    storage = const FlutterSecureStorage();
+  }
+
   final _plateNumberController = TextEditingController();
   final _nameController = TextEditingController();
 
@@ -57,12 +66,18 @@ class _NewVehicle extends State<NewVehicle> {
   }
 
   void onAddVehicle(Vehicle vehicle) async {
+    var token = await storage.read(key: "jwt_token");
+
     try {
-      await http.post(
-          Uri.parse("http://192.168.0.188:3000/api/v1/vehicles/register"),
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode(vehicle));
-      // var jsonResponse = jsonDecode(response.body);
+      var response = await http.post(
+          Uri.parse("http://192.168.0.188:3000/api/v1/vehicles/add"),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${token}"
+          },
+          body: jsonEncode(
+              {"name": vehicle.name, "numberPlate": vehicle.plateNumber}));
+      var jsonResponse = jsonDecode(response.body);
     } catch (e) {
       _showDialog();
     }
